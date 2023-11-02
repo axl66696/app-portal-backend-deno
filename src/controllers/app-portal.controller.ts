@@ -1,14 +1,19 @@
 import { AppPortalService } from '../services/mod.ts';
 import { Controller, inject, Replier, Subscriber } from '@his/base/controller-base/mod.ts';
 import { JSONCodec, JsMsg, Msg } from 'https://deno.land/x/nats@v1.17.0/src/mod.ts';
+// import { OrderService } from '@his/model/order-service/mod.ts';
+import { MongoBaseService } from '@his/base/mongo-base/mod.ts';
+// import { T } from '@his/base/types/mod.ts';
 
 @Controller('appPortal')
 export class AppPortalController {
   #appPortalService = inject(AppPortalService);
-  #codec = JSONCodec<T>();
+//   orderService = inject(OrderService);
+  mongoDB = inject(MongoBaseService);
+  #codec = JSONCodec<any>();
 
   @Subscriber('insert')
-  async insertAppPortal(message: JsMsg, payload: T) {
+  async insertAppPortal(message: JsMsg, payload: any) {
     try {
       console.log('Processing insertAppPortal: ', payload);
       await this.#appPortalService.insertAppPortal();
@@ -21,7 +26,7 @@ export class AppPortalController {
   }
 
   @Replier('list')
-  async getAppPortals(message: Msg, payload: T) {
+  async getAppPortals(message: Msg, payload: any) {
     try {
       console.log('Processing getAppPortals: ', payload);
       const appPortals = await this.#appPortalService.getAppPortals();
@@ -30,5 +35,23 @@ export class AppPortalController {
     } catch (error) {
       console.error('Error while getAppPortals: ', error);
     }
+  }
+
+  @Replier('appNews.find')
+  async getAppNewsList(message: Msg, payload: any) {
+    console.log('=====enter appNews========>', payload);
+    await using db = await this.mongoDB.connect();
+
+    await db.collection("AppNews").find({ 'sendUser.code': payload }).toArray()
+      .then((appNews:unknown) => {
+        console.log("==============AppNews==================", appNews);
+        message.respond(this.#codec.encode(appNews));
+      });
+    // appNews.then((x:unknown) => {
+    //         console.log("==============x==================", x);
+    //         message.respond(this.#codec.encode(x));
+    //       });
+    console.log('=====end appNews========>');
+
   }
 }
