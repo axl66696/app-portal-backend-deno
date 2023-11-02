@@ -39,19 +39,13 @@ export class AppPortalController {
 
   @Replier('appNews.find')
   async getAppNewsList(message: Msg, payload: any) {
-    console.log('=====enter appNews========>', payload);
     await using db = await this.mongoDB.connect();
 
     await db.collection("AppNews").find({ 'sendUser.code': payload }).toArray()
       .then((appNews:unknown) => {
-        console.log("==============AppNews==================", appNews);
         message.respond(this.#codec.encode(appNews));
       });
-    // appNews.then((x:unknown) => {
-    //         console.log("==============x==================", x);
-    //         message.respond(this.#codec.encode(x));
-    //       });
-    console.log('=====end appNews========>');
+
 
   }
 }
