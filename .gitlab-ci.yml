@@ -1,0 +1,3 @@
+include:
+  - project: 'hpc-his/devops/ci-template'
+    file: '/src/model/model.gitlab-ci.yml'

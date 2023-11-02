@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "tasks": {
+    "check": "deno cache --reload --lock-write --check src/mod.ts"
+  },
+  "importMap": "import_map.json",
+  "fmt": {
+    "singleQuote": true,
+    "include": ["src/**/*.ts"],
+    "lineWidth": 250
+  }
+}
