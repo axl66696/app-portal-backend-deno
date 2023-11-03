@@ -4,9 +4,7 @@ import { JsMsg, JSONCodec, Msg } from 'https://deno.land/x/nats@v1.17.0/src/mod.
 import { MongoBaseService } from '@his/base/mongo-base/mod.ts';
 import { nanoid } from 'npm:nanoid';
 import { Coding } from '@his-base/datatypes';
-import { AppNews } from '../../../../view-model/app/app-news.js'
-import { AppStore } from '../../../../view-model/app/app-store.js'
-import { UserNews } from '../../../../view-model/app/user-news.js'
+
 @Controller('appPortal')
 export class AppPortalController {
   #appPortalService = inject(AppPortalService);

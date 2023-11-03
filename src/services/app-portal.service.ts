@@ -2,9 +2,7 @@ import { inject } from '@his/base/controller-base/mod.ts';
 import { MongoBaseService } from '@his/base/mongo-base/mod.ts';
 import { JetStreamService } from '@his/base/jetstream/mod.ts';
 import { Coding } from '@his-base/datatypes';
-import { AppNews } from '../../../../view-model/app/app-news.js'
-import { AppStore } from '../../../../view-model/app/app-store.js'
-import { UserNews } from '../../../../view-model/app/user-news.js'
+// import { AppNews} from '@his-viewmodel/appPortal';
 
 export class AppPortalService {
   mongoDB = inject(MongoBaseService);
@@ -27,6 +25,11 @@ export class AppPortalService {
     });
   }
 
+  async getUserIds(appStoreFilter: object) {
+    await using db = await this.mongoDB.connect();
+    return await db.collection('UserAppStore').distinct('user', appStoreFilter);
+  }
+
   async getAppNewsList(user: string) {
     await using db = await this.mongoDB.connect();
     return await db.collection('AppNews').find({ 'sendUser.code': user })
@@ -38,34 +41,31 @@ export class AppPortalService {
     return await db.collection('AppStore').find().toArray();
   }
 
-  async getUserIds(appStoreFilter: unknown) {
-    await using db = await this.mongoDB.connect();
-    return await db.collection('UserAppStore').distinct('user', appStoreFilter);
-  }
+  
 
-  async insertAppNews(appNews: AppNews) {
+  async insertAppNews(appNews: unknown) {
     await using db = await this.mongoDB.connect();
     await db.collection('AppNews').insertOne(appNews);
   }
 
-  async pubUserNews(user: Coding, payload: UserNews) {
+  async pubUserNews(user: Coding, payload: object) {
     await this.jetStreamService.publish(
       `appPortal.appPortal.userNews.${user.code}`,
       payload,
     );
   }
 
-  async insertUserNews(userNews: UserNews) {
+  async insertUserNews(userNews: unknown) {
     await using db = await this.mongoDB.connect();
     await db.collection('UserNews').insertOne(userNews);
   }
 
-  async getMyAppNews(pipeline: unknown) {
+  async getMyAppNews(pipeline: Object[]) {
     await using db = await this.mongoDB.connect();
     return await db.collection('AppNews').aggregate(pipeline).toArray();
   }
 
-  async modiftAppNews(appNews: AppNews) {
+  async modiftAppNews(appNews: any) {
     await using db = await this.mongoDB.connect();
     await db.collection('AppNews').updateOne(
       { _id: appNews._id },

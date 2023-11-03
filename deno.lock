@@ -157,7 +157,7 @@
     "https://his-dev.hepiuscare.com.tw/base/mongo-base/hpc-collection.ts": "307399cb98822ccda0bf58fb6f83d056661dcc6352790c62f6ff16a70df67d18",
     "https://his-dev.hepiuscare.com.tw/base/mongo-base/join-object.ts": "99517e38fb439a6dd21c6249ace99415e8dc79e461b8c7d30c20271943e41dc0",
     "https://his-dev.hepiuscare.com.tw/base/mongo-base/mod.ts": "ddeaaa6f38469274422bee1bb8be5f7d5bfd0975aca45ccf710736cbcc800add",
-    "https://his-dev.hepiuscare.com.tw/base/mongo-base/mongo-base.ts": "7214518e5ecf418333eab7c1ee86ae9bd862b7a5a82a102f76e6ebd754e387e0",
+    "https://his-dev.hepiuscare.com.tw/base/mongo-base/mongo-base.ts": "259d311ec74ed1dc2d1c4366eabaf8e865649877b6751762aaca6a387375d05d",
     "https://raw.githubusercontent.com/nats-io/nkeys.js/v1.0.4/modules/esm/deps.ts": "38d8dcfc3ca0b7429532477127719affa0da04824610e2a1069f9f935032894f",
     "https://raw.githubusercontent.com/nats-io/nkeys.js/v1.0.4/modules/esm/mod.ts": "43c3fbbad0244dde7ae229e778dbefba7f28955a7ff5257d4ed1635b5576fb31",
     "https://raw.githubusercontent.com/nats-io/nkeys.js/v1.0.4/modules/esm/nacl.js": "251e4ffcd6d2c56c7773bcf8c1549e9c07b32adb7a2156908a04930a52e614de",
