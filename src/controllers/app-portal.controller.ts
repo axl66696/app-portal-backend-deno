@@ -52,14 +52,14 @@ export class AppPortalController {
       const tmp = {
         '_id': _id,
         'appStore_ids': payload.appStore_ids,
-        'level':payload.level,
-        'title':payload.title,
+        'level': payload.level,
+        'title': payload.title,
         'url': payload.url,
-        'sendUser':payload.sendUser,
+        'sendUser': payload.sendUser,
         'sendTime': new Date(payload.sendTime),
         'expiredTime': new Date(payload.expiredTime),
         'updatedBy': payload.updatedBy,
-        'updatedAt': new Date(payload.updatedAt)
+        'updatedAt': new Date(payload.updatedAt),
       };
       message.ack();
 
@@ -70,44 +70,35 @@ export class AppPortalController {
         console.log('>1');
         const ids: object[] = [];
         tmp.appStore_ids.forEach((x: string) => {
-          ids.push({ 'appStore_id': x});
+          ids.push({ 'appStore_id': x });
         });
         const appStoreFilter = { $or: ids };
         console.log('appStoreFilter', appStoreFilter);
 
         userIds = await this.#appPortalService.getUserIds(appStoreFilter);
-        // await this.mongoDB.collections('UserAppStore').collection().distinct('user', appStoreFilter).then((x)=>{
-        //     userIds = x;
-        //   ;});
+
         console.log('userIds', userIds);
 
       } else if (tmp.appStore_ids.length === 1) {
 
-        // console.log('=1');
         const appStoreFilter = { 'appStore_id': tmp.appStore_ids[0] };
         console.log('appStoreFilter', appStoreFilter);
 
         userIds = await this.#appPortalService.getUserIds(appStoreFilter);
-        // await this.mongoDB.collections('UserAppStore').collection().distinct('user', appStoreFilter).then((x)=>{
-        //     userIds = x;
-        //   ;});
+
         console.log('userIds', userIds);
       } else {
         console.log('0');
         userIds = await this.#appPortalService.getUserIds({});
-        // await this.mongoDB.collections('UserAppStore').collection().distinct('user', {}).then((x)=>{
-        //     userIds = x;
-        //   ;});
+
         console.log('userIds', userIds);
       }
       
       
       console.log('========>存進db的appNews', tmp);
-    //   this.mongoDB.collections('AppNews').collection<StringId>().insertOne(tmp)
+
       await this.#appPortalService.insertAppNews(tmp);
       userIds.forEach(async (user: Coding) => {
-        console.log('user', user);
-        // await this.jetStreamService.publish(`appPortal.news.userNews.${user.code}`, {appNews_id:tmp._id, user:user, readTime:new Date('2999-12-31T23:59:59.000Z')})
        const payload = { appNews_id: tmp._id, user: user, readTime: new Date('2999-12-31T23:59:59.000Z') };
         await this.#appPortalService.pubUserNews(user, payload);
       });
@@ -123,7 +114,7 @@ export class AppPortalController {
   async insertUserNews(message: JsMsg, payload: any) {
     try {
       
-      console.log('payload', payload)
+      console.log('payload', payload);
       const userNews_id = nanoid();
 
       const tmp = {
@@ -152,10 +143,10 @@ export class AppPortalController {
       {
         $match: {
           '_id': payload,
-        }
+        },
       },
       /** 第二階段
-       * 從 AppNews 集合中關聯 UserNews 數據 
+       * 從 AppNews 集合中關聯 UserNews 數據
       */
       {
         $lookup: {
@@ -163,7 +154,7 @@ export class AppPortalController {
           localField: '_id', // AppNews 集合中的字段，用於關聯
           foreignField: 'appNews_id', // UserNews 集合中的字段，用於關聯
           as: 'userNewsData', // 輸出字段的别名
-        }
+        },
       },
       /** 第三階段：將相關數據進行重構，生成合併後的文檔 */
       {
@@ -185,12 +176,10 @@ export class AppPortalController {
           sendTime: 1,
           expiredTime: 1,
           readTime: '$userNewsData.readTime',
-        }
+        },
       }
     ]
     const myAppNews = await this.#appPortalService.getMyAppNews(pipeline);
-    // let myAppNews = []
-    // const myAppNews = await this.mongoDB.collections('AppNews').collection().aggregate(pipeline).toArray()
     console.log('===========myAppNews================', myAppNews);
     if (myAppNews) {
       message.respond(this.#codec.encode(myAppNews));
@@ -201,40 +190,22 @@ export class AppPortalController {
   async modifyAppNews(message: JsMsg, payload: any) {
     try {
       
-        const tmpDate = new Date();
+      const tmpDate = new Date();
   
-        const tmp = {
-          '_id': payload._id,
-          'appStore_ids': payload.appStore_ids,
-          'level': payload.level,
-          'title': payload.title,
-          'url': payload.url,
-          'sendUser': payload.sendUser,
-          'sendTime': new Date(payload.sendTime),
-          'expiredTime': new Date(payload.expiredTime),
-          'updatedBy': payload.updatedBy,
-          'updatedAt': tmpDate,
-        };
-        await this.#appPortalService.modiftAppNews(tmp);
-        // this.mongoDB
-        //   .collections('AppNews')
-        //   .collection()
-        //   .updateOne(
-        //     { '_id': payload._id },
-        //     { 
-        //         $set: {
-        //         'appStore_ids': payload.appStore_ids,
-        //         'level':payload.level,
-        //         'title':payload.title,
-        //         'url': payload.url,
-        //         'sendUser':payload.sendUser,
-        //         'sendTime': new Date(payload.sendTime),
-        //         'expiredTime': new Date(payload.expiredTime),
-        //         'updatedBy': payload.updatedBy,
-        //         'updatedAt': tmpDate}
-        //     }
-        //   );
-        message.ack();
+      const tmp = {
+        '_id': payload._id,
+        'appStore_ids': payload.appStore_ids,
+        'level': payload.level,
+        'title': payload.title,
+        'url': payload.url,
+        'sendUser': payload.sendUser,
+        'sendTime': new Date(payload.sendTime),
+        'expiredTime': new Date(payload.expiredTime),
+        'updatedBy': payload.updatedBy,
+        'updatedAt': tmpDate,
+      };
+      await this.#appPortalService.modiftAppNews(tmp);
+      message.ack();
     } catch (error) {
       console.error('Error processing order.create: ', error);
       message.nak();
@@ -245,19 +216,9 @@ export class AppPortalController {
   @Subscriber('appNews.delete')
   async removeAppNews(message: JsMsg, payload: any) {
     try {
-        // this.mongoDB
-        //   .collections('AppNews')
-        //   .collection()
-        //   .updateOne(
-        //     { '_id': payload },
-        //     {
-        //         $set:{'expiredTime':new Date()}
-        //     }
-        //   );
         await this.#appPortalService.removeAppNews(payload);
         message.ack();
         
-    
     } catch (error) {
       console.error('Error processing order.create: ', error);
       message.nak();
@@ -270,12 +231,5 @@ export class AppPortalController {
     const appStores = await this.#appPortalService.getAppStores();
     console.log('appStores', appStores);
     message.respond(this.#codec.encode(appStores));
-    // this.mongoDB
-    //   .collections('AppStore')
-    //   .findDocuments({})
-    //   .then((appStores) => {
-    //     console.log('==============AppStore==================', appStores);
-    //     message.respond(this.#codec.encode(appStores));
-    //   });
   }
 }

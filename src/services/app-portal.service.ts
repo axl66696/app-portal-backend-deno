@@ -4,8 +4,8 @@ import { JetStreamService } from '@his/base/jetstream/mod.ts';
 import { Coding } from '@his-base/datatypes';
 
 export class AppPortalService {
-    mongoDB = inject(MongoBaseService);
-    jetStreamService = inject(JetStreamService);
+  mongoDB = inject(MongoBaseService);
+  jetStreamService = inject(JetStreamService);
 
   async insertAppPortal() {
     await new Promise(() => {
