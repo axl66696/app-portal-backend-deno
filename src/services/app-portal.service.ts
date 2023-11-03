@@ -2,6 +2,9 @@ import { inject } from '@his/base/controller-base/mod.ts';
 import { MongoBaseService } from '@his/base/mongo-base/mod.ts';
 import { JetStreamService } from '@his/base/jetstream/mod.ts';
 import { Coding } from '@his-base/datatypes';
+import { AppNews } from '../../../../view-model/app/app-news.js'
+import { AppStore } from '../../../../view-model/app/app-store.js'
+import { UserNews } from '../../../../view-model/app/user-news.js'
 
 export class AppPortalService {
   mongoDB = inject(MongoBaseService);
@@ -35,48 +38,48 @@ export class AppPortalService {
     return await db.collection('AppStore').find().toArray();
   }
 
-  async getUserIds(appStoreFilter: any) {
+  async getUserIds(appStoreFilter: unknown) {
     await using db = await this.mongoDB.connect();
     return await db.collection('UserAppStore').distinct('user', appStoreFilter);
   }
 
-  async insertAppNews(appNews: any) {
+  async insertAppNews(appNews: AppNews) {
     await using db = await this.mongoDB.connect();
     await db.collection('AppNews').insertOne(appNews);
   }
 
-  async pubUserNews(user: Coding, payload: any) {
+  async pubUserNews(user: Coding, payload: UserNews) {
     await this.jetStreamService.publish(
       `appPortal.appPortal.userNews.${user.code}`,
       payload,
     );
   }
 
-  async insertUserNews(userNews: any) {
+  async insertUserNews(userNews: UserNews) {
     await using db = await this.mongoDB.connect();
     await db.collection('UserNews').insertOne(userNews);
   }
 
-  async getMyAppNews(pipeline: any) {
+  async getMyAppNews(pipeline: unknown) {
     await using db = await this.mongoDB.connect();
     return await db.collection('AppNews').aggregate(pipeline).toArray();
   }
 
-  async modiftAppNews(userNews: any) {
+  async modiftAppNews(appNews: AppNews) {
     await using db = await this.mongoDB.connect();
     await db.collection('AppNews').updateOne(
-      { _id: userNews._id },
+      { _id: appNews._id },
       {
         $set: {
-          'appStore_ids': userNews.appStore_ids,
-          'level': userNews.level,
-          'title': userNews.title,
-          'url': userNews.url,
-          'sendUser': userNews.sendUser,
-          'sendTime': new Date(userNews.sendTime),
-          'expiredTime': new Date(userNews.expiredTime),
-          'updatedBy': userNews.updatedBy,
-          'updatedAt': userNews.updatedAt,
+          'appStore_ids': appNews.appStore_ids,
+          'level': appNews.level,
+          'title': appNews.title,
+          'url': appNews.url,
+          'sendUser': appNews.sendUser,
+          'sendTime': new Date(appNews.sendTime),
+          'expiredTime': new Date(appNews.expiredTime),
+          'updatedBy': appNews.updatedBy,
+          'updatedAt': appNews.updatedAt,
         },
       },
     );
