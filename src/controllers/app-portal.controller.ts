@@ -1,6 +1,6 @@
 import { AppPortalService } from '../services/mod.ts';
-import { Controller, inject, Replier, Subscriber } from '@his/base/controller-base/mod.ts';
-import { JsMsg, JSONCodec, Msg } from 'https://deno.land/x/nats@v1.17.0/src/mod.ts';
+import { Controller,inject,Replier,Subscriber } from '@his/base/controller-base/mod.ts';
+import { JsMsg,JSONCodec,Msg } from 'https://deno.land/x/nats@v1.17.0/src/mod.ts';
 import { MongoBaseService } from '@his/base/mongo-base/mod.ts';
 import { nanoid } from 'npm:nanoid';
 import { Coding } from '@his-base/datatypes';
@@ -63,10 +63,8 @@ export class AppPortalController {
       };
       message.ack();
 
-
       let userIds: any = [];
       if (tmp.appStore_ids.length > 1) {
-
         console.log('>1');
         const ids: object[] = [];
         tmp.appStore_ids.forEach((x: string) => {
@@ -78,9 +76,7 @@ export class AppPortalController {
         userIds = await this.#appPortalService.getUserIds(appStoreFilter);
 
         console.log('userIds', userIds);
-
       } else if (tmp.appStore_ids.length === 1) {
-
         const appStoreFilter = { 'appStore_id': tmp.appStore_ids[0] };
         console.log('appStoreFilter', appStoreFilter);
 
@@ -93,17 +89,18 @@ export class AppPortalController {
 
         console.log('userIds', userIds);
       }
-      
-      
+
       console.log('========>存進db的appNews', tmp);
 
       await this.#appPortalService.insertAppNews(tmp);
       userIds.forEach(async (user: Coding) => {
-       const payload = { appNews_id: tmp._id, user: user, readTime: new Date('2999-12-31T23:59:59.000Z') };
+        const payload = {
+          appNews_id: tmp._id,
+          user: user,
+          readTime: new Date('2999-12-31T23:59:59.000Z'),
+        };
         await this.#appPortalService.pubUserNews(user, payload);
       });
-      
-      
     } catch (error) {
       console.error('Error processing news.appNews.add: ', error);
       message.nak();
@@ -113,7 +110,6 @@ export class AppPortalController {
   @Subscriber('userNews.>')
   async insertUserNews(message: JsMsg, payload: any) {
     try {
-      
       console.log('payload', payload);
       const userNews_id = nanoid();
 
@@ -125,7 +121,7 @@ export class AppPortalController {
         'updatedBy': payload.user,
         'updatedAt': new Date(),
       };
-    
+
       await this.#appPortalService.insertUserNews(tmp);
       message.ack();
     } catch (error) {
@@ -136,8 +132,6 @@ export class AppPortalController {
 
   @Replier('news.newsContent')
   async getMyAppNews(message: Msg, payload: any) {
-
-
     const pipeline = [
       /** 第一階段：篩選符合條件的 AppNews 數據 */
       {
@@ -147,7 +141,7 @@ export class AppPortalController {
       },
       /** 第二階段
        * 從 AppNews 集合中關聯 UserNews 數據
-      */
+       */
       {
         $lookup: {
           from: 'UserNews', // 關聯的collection名稱
@@ -161,7 +155,7 @@ export class AppPortalController {
         $unwind: {
           path: '$userNewsData',
           preserveNullAndEmptyArrays: true,
-        }
+        },
       },
       /** 第四階段：輸出所需的欄位 */
       {
@@ -177,8 +171,8 @@ export class AppPortalController {
           expiredTime: 1,
           readTime: '$userNewsData.readTime',
         },
-      }
-    ]
+      },
+    ];
     const myAppNews = await this.#appPortalService.getMyAppNews(pipeline);
     console.log('===========myAppNews================', myAppNews);
     if (myAppNews) {
@@ -189,9 +183,8 @@ export class AppPortalController {
   @Subscriber('appNews.modify')
   async modifyAppNews(message: JsMsg, payload: any) {
     try {
-      
       const tmpDate = new Date();
-  
+
       const tmp = {
         '_id': payload._id,
         'appStore_ids': payload.appStore_ids,
@@ -210,15 +203,13 @@ export class AppPortalController {
       console.error('Error processing order.create: ', error);
       message.nak();
     }
-  
   }
 
   @Subscriber('appNews.delete')
   async removeAppNews(message: JsMsg, payload: any) {
     try {
-        await this.#appPortalService.removeAppNews(payload);
-        message.ack();
-        
+      await this.#appPortalService.removeAppNews(payload);
+      message.ack();
     } catch (error) {
       console.error('Error processing order.create: ', error);
       message.nak();
