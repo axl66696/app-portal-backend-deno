@@ -3,7 +3,8 @@
   "packages": {
     "specifiers": {
       "npm:mongodb": "npm:mongodb@6.2.0",
-      "npm:mongodb@6.2.0": "npm:mongodb@6.2.0"
+      "npm:mongodb@6.2.0": "npm:mongodb@6.2.0",
+      "npm:nanoid": "npm:nanoid@5.0.2"
     },
     "npm": {
       "@mongodb-js/saslprep@1.1.1": {
@@ -49,6 +50,10 @@
           "bson": "bson@6.2.0",
           "mongodb-connection-string-url": "mongodb-connection-string-url@2.6.0"
         }
+      },
+      "nanoid@5.0.2": {
+        "integrity": "sha512-2ustYUX1R2rL/Br5B/FMhi8d5/QzvkJ912rBYxskcpu0myTHzSZfTr1LAS2Sm7jxRUObRrSBFoyzwAhL49aVSg==",
+        "dependencies": {}
       },
       "punycode@2.3.1": {
         "integrity": "sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==",
@@ -137,6 +142,18 @@
     "https://his-dev.hepiuscare.com.tw/base/controller-base/decorators.ts": "37f14b5572c73d8e9ce0a1a369329d58aabdf7a10e0dac0a0c0d95cfaa85aba5",
     "https://his-dev.hepiuscare.com.tw/base/controller-base/instanceProvider.ts": "4ea5dda90bf86694f80d2d3cb6dc91da417674f56865cac50aaf297db3025967",
     "https://his-dev.hepiuscare.com.tw/base/controller-base/mod.ts": "89355ada4d119d8b0ada8c915be092e9bd38e1e93ce5f94924a3036a82dd6032",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/index.js": "10b392834508f2d27909acd99d1079b80e835ea66f1f720a5ddccff6347d46ff",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/address.js": "7209bb8833d04a995bf4b275dd667004cc343072c625fa28078dfa7a2abb4285",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/check-list.js": "f66f68968508e381daf6cb0a38b414aa89656cc70bb66898cd2135d5add362e3",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/coding.js": "18273b80764d568afabb7d820103a603f808239eadcb0e30711da9df1a2ad1c0",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/descriptions.js": "573cda8a7f2630afd2bb8465ddaf527f12e52b2e7775da3558c9019445d48bd0",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/index-object.js": "3b70d1602571459a494177f8ca7579961d2e07ba1f918419ac8211d748a57658",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/index.js": "1e15cb1b17f6db62b108b8e1e61d1e685d90e41293b72411abdf2103d3e6265c",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/period.js": "000e36b34ea8658c0f970cf53c270b4bf35039e6c3c64a6d7042d08f7184afd3",
+    "https://his-dev.hepiuscare.com.tw/base/datatypes/src/quantity.js": "0255fda506d7f911cff151d19179e5d40e4775fbf10a7395267b306e8fd1a9bc",
+    "https://his-dev.hepiuscare.com.tw/base/jetstream/jetstream.interface.ts": "c2ff21ba5be9ee698d1ff5d9179633119bb324420f8186f0d02fdba457906d6b",
+    "https://his-dev.hepiuscare.com.tw/base/jetstream/jetstream.service.ts": "42155440bc4989993b87f7b6ac8afb06db499b42be898a9a5588177daaae49b0",
+    "https://his-dev.hepiuscare.com.tw/base/jetstream/mod.ts": "9eb69910adabad566c3331ccd320c6c379bb1f776121e38f76993804ae4ed2a5",
     "https://his-dev.hepiuscare.com.tw/base/mongo-base/hpc-collection.ts": "307399cb98822ccda0bf58fb6f83d056661dcc6352790c62f6ff16a70df67d18",
     "https://his-dev.hepiuscare.com.tw/base/mongo-base/join-object.ts": "99517e38fb439a6dd21c6249ace99415e8dc79e461b8c7d30c20271943e41dc0",
     "https://his-dev.hepiuscare.com.tw/base/mongo-base/mod.ts": "ddeaaa6f38469274422bee1bb8be5f7d5bfd0975aca45ccf710736cbcc800add",
